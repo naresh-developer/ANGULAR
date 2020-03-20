@@ -9,21 +9,30 @@ import { HeaderComponent } from './layout/header/header.component';
 import { MyInterceptor } from './_helper/my.interceptor';
 import { ErrorInterceptor } from './_helper/error.interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoaderInterceptor } from './_helper/loader.interceptor';
+import { LoaderService } from './_services/loader.service';
+import { LoaderComponent } from './layout/loader/loader.component';
+import {MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+MatProgressSpinnerModule
 
 @NgModule({
   declarations: [
     AppComponent,
     ContentLayoutComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoaderComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     HttpClientModule,
+    MatProgressSpinnerModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
+  providers: [LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

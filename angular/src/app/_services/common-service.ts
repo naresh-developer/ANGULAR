@@ -10,8 +10,8 @@ export class CommonServiceService {
 
   constructor(private http: HttpClient) { }
 
-productList(){
-    return this.http.get(`${environment.apiUrl}/auth/productList`)
+productList(params){
+    return this.http.get(`${environment.apiUrl}/auth/productList`,{params : {name : params}})
 }
 
 createProduct(dataPost){
