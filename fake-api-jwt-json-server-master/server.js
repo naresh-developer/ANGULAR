@@ -110,6 +110,7 @@ fs.readFile("./product.json", (err, data) => {
 
 
 server.get('/auth/productList', (req, res) => {
+  console.log('req.params', req.query.name);
   
   fs.readFile("./product.json", (err, data) => {  
     if (err) {
@@ -118,11 +119,18 @@ server.get('/auth/productList', (req, res) => {
       res.status(status).json({status, message})
       return
     };
-
+    
     var data = JSON.parse(data.toString());
+    var productData = [] 
+    if(req.query.name != ''){
+      productData = data.product.filter(product => product.productName.toLowerCase().includes(req.query.name.toLowerCase()));   
+     } else {
+      productData = data.product
+     }
+     console.log("data.productData", productData)
     
     
-    res.status(200).json({data : data.product,message : "Product add successfully."})
+    res.status(200).json({data : productData, message : "Product List"})
 });
 
 
